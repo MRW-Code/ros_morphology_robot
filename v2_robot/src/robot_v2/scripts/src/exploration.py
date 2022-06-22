@@ -48,9 +48,9 @@ class explorationThread(QThread):
         # rospy.spin()
 
     def callback(self, data):
-        # self.shall_i_move = data.data
-        # print(self.shall_i_move)
-        print('hi')
+        self.shall_i_move = data.data
+        print(f'data from the publisher = {data.data}')
+        # print('hi')
 
     def create_sub(self):
         self.move_sub = rospy.Subscriber('ready_move', Bool, self.callback)
@@ -83,24 +83,35 @@ class explorationThread(QThread):
                     for i in range(0, self.myvar.spinRowsWells.value()):
                         for j in range(0, self.myvar.spinColsWells.value() - 1):
 
-                            config.pictureSaved = False
+                            while self.shall_i_move == False:
+                                continue
+                                if self.shall_i_move or self.shall_i_move == None:
+                                    config.pictureSaved = False
 
-                            self.explorationUpdate.emit(True)
-                            time.sleep(0.1)
-                            while config.pictureSaved == False:
-                                pass
-                            print("figure stored" + str(i + 1) + "," + str(j + 1))
-                            self.explorationUpdate.emit(False)
-                            config.pictureSaved = False
-                            time.sleep(0.5)
+                                    self.explorationUpdate.emit(True)
+                                    time.sleep(0.1)
+                                    while config.pictureSaved == False:
+                                        pass
+                                    print("figure stored" + str(i + 1) + "," + str(j + 1))
 
-                            print('@MOVRX' + str(dirXMovement * w2wDistance) + self.speed_explore)
 
-                            self.myvar.arduino.write(
-                                bytes('$J=G21G91X' + str(dirXMovement * w2wDistance) + self.speed_explore,
-                                      'utf-8'))  # update this by @CALSTART\r to calibrate all motors but use interrumptions
+                            while self.shall_i_move == False:
+                                continue
+                                if self.shall_i_move or self.shall_i_move == None:
+                                    config.pictureSaved = False
 
-                            time.sleep(5.0)
+                                    self.explorationUpdate.emit(False)
+                                    config.pictureSaved = False
+                                    time.sleep(0.5)
+
+                                    print('@MOVRX' + str(dirXMovement * w2wDistance) + self.speed_explore)
+
+                                    self.myvar.arduino.write(
+                                        bytes('$J=G21G91X' + str(dirXMovement * w2wDistance) + self.speed_explore,
+                                              'utf-8'))  # update this by @CALSTART\r to calibrate all motors but use interrumptions
+
+                                    # time.sleep(5.0)
+                                    self.shall_i_move == False
 
                             if not self.ThreadActive:
                                 break
