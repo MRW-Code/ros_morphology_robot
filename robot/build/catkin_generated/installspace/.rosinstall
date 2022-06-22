@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/matthew/ros_workspace/robot/install/setup.sh

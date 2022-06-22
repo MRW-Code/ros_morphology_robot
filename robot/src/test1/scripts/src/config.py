@@ -1,0 +1,2 @@
+pictureSaved = None
+taskReady = None
