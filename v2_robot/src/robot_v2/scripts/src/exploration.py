@@ -86,7 +86,7 @@ class explorationThread(QThread):
                             config.pictureSaved = False
 
                             self.explorationUpdate.emit(True)
-                            # time.sleep(0.1)
+                            time.sleep(0.1)
                             while config.pictureSaved == False:
                                 pass
                             print(f'the movement call is {self.shall_i_move}')
@@ -97,7 +97,7 @@ class explorationThread(QThread):
                             print("figure stored" + str(i + 1) + "," + str(j + 1))
                             self.explorationUpdate.emit(False)
                             config.pictureSaved = False
-                            # time.sleep(0.5)
+                            time.sleep(0.5)
 
                             print('@MOVRX' + str(dirXMovement * w2wDistance) + self.speed_explore)
 
