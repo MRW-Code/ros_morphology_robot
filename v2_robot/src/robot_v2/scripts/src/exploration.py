@@ -29,6 +29,9 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import Qt
 import src.config as config
 
+import rospy
+from std_msgs.msg import Bool, String
+
 
 class explorationThread(QThread):
     explorationUpdate = pyqtSignal(bool)
@@ -36,6 +39,23 @@ class explorationThread(QThread):
     def __init__(self, myvar, parent=None):
         QThread.__init__(self, parent)
         self.myvar = myvar
+        self.shall_i_move = None
+
+        self.sub_thread = Thread(target=self.create_sub)
+        self.sub_thread.start()
+
+        # self.move_sub = rospy.Subscriber('ready_move', Bool, self.callback)
+        # rospy.spin()
+
+    def callback(self, data):
+        # self.shall_i_move = data.data
+        # print(self.shall_i_move)
+        print('hi')
+
+    def create_sub(self):
+        self.move_sub = rospy.Subscriber('ready_move', Bool, self.callback)
+        # rospy.spin()
+
 
     def run(self):
         self.ThreadActive = True
@@ -126,6 +146,7 @@ class explorationThread(QThread):
     def stop(self):
         print('Exploration STOPPED')
         self.ThreadActive = False
+        self.sub_thread.join(0)
         self.quit()
 
     def flagStatus(self):
