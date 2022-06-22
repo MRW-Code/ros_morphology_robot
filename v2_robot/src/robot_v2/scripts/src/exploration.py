@@ -39,7 +39,7 @@ class explorationThread(QThread):
     def __init__(self, myvar, parent=None):
         QThread.__init__(self, parent)
         self.myvar = myvar
-        self.shall_i_move = None
+        self.shall_i_move = False
 
         self.sub_thread = Thread(target=self.create_sub)
         self.sub_thread.start()
@@ -86,13 +86,18 @@ class explorationThread(QThread):
                             config.pictureSaved = False
 
                             self.explorationUpdate.emit(True)
-                            time.sleep(0.1)
+                            # time.sleep(0.1)
                             while config.pictureSaved == False:
                                 pass
+                            print(f'the movement call is {self.shall_i_move}')
+                            while not self.shall_i_move:
+                                pass
+                                
+                            self.shall_i_move = False
                             print("figure stored" + str(i + 1) + "," + str(j + 1))
                             self.explorationUpdate.emit(False)
                             config.pictureSaved = False
-                            time.sleep(0.5)
+                            # time.sleep(0.5)
 
                             print('@MOVRX' + str(dirXMovement * w2wDistance) + self.speed_explore)
 
