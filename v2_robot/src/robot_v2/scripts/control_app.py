@@ -5,8 +5,6 @@ import os
 import rospy
 
 if __name__ == '__main__':
-    while not rospy.is_shutdown():
-
-        app = QApplication(sys.argv)
-        window = ControlWindow()
-        sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    window = ControlWindow()
+    sys.exit(app.exec_())
